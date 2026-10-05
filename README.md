@@ -12,22 +12,23 @@ Rather than optimizing only predictive metrics such as Rank IC, the project ulti
 
 The model predicts the **cross-sectional z-score of 5-day forward returns** rather than raw future returns.
 
-For stock \(i\) at time \(t\):
-
-\[
-r_{i,t}^{(5)} = \frac{P_{i,t+5}}{P_{i,t}} - 1
-\]
+For stock *i* at time *t*:
+<p align="center">
+  <b>r<sub>i,t</sub><sup>(5)</sup> = P<sub>i,t+5</sub> / P<sub>i,t</sub> - 1</b>
+</p>
 
 The returns are then standardized within each trading date:
 
-\[
-z_{i,t} =
-\frac{
-r_{i,t}^{(5)} - \mu_t
-}{
-\sigma_t
-}
-\]
+<p align="center">
+  <b>z<sub>i,t</sub> = (r<sub>i,t</sub><sup>(5)</sup> - μ<sub>t</sub>) / σ<sub>t</sub></b>
+</p>
+
+where:
+
+- **r<sub>i,t</sub><sup>(5)</sup>** = 5-day forward return for stock *i* at time *t*
+- **μ<sub>t</sub>** = mean 5-day forward return across all stocks on date *t*
+- **σ<sub>t</sub>** = standard deviation of 5-day forward returns across all stocks on date *t*
+
 
 This reframes the problem from predicting whether the market will rise or fall to predicting **which CSI500 stocks are likely to outperform their peers**, which better matches the benchmark-relative competition objective.
 
@@ -129,7 +130,7 @@ The ensemble:
 5. Caps individual weights at 10%.
 6. Renormalizes the final portfolio.
 
-The resulting ensemble used approximately 50 stocks at the portfolio level, providing more diversification than the aggressive Top-30 strategy while retaining exposure to high-consensus predictions.
+The resulting ensemble used approximately 50 stocks at the portfolio level, providing more diversification than the aggressive Top-30 strategy while retaining exposure to high-consensus predictions. Also combats potential overfitting on previous stock data.
 
 ## Results
 
@@ -161,6 +162,7 @@ The main lessons were:
 Across identical historical evaluation windows, the final LightGBM workflows consistently improved upon the provided XGBoost baseline while preserving a fully reproducible, no-leakage evaluation pipeline.
 
 
+### File Directory
 **fetch_extra_data.py** <br>
 Supplemental-data helper. It can fetch valuation, financial, and macro data and merge available features into the panel. Financials are shifted with an announcement lag to reduce leakage risk.
 
